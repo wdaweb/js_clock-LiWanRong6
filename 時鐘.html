@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background: rgb(241, 213, 129);
+    }
+
+    img {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #clock {
+      background-color: white;
+      width: 200px;
+      height: 200px;
+      border: 10px solid rgb(81, 12, 128);
+      border-radius: 50%;
+      position: absolute;
+      top: 20%;
+      left: 10%;
+    }
+
+    #hour {
+      width: 20%;
+      height: 5px;
+      background: rgb(165, 25, 67);
+      border-radius: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%);
+      transform-origin: left center;
+    }
+
+    #minute {
+      width: 35%;
+      height: 5px;
+      background: rgb(165, 25, 67);
+      border-radius: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%);
+      transform-origin: left center;
+    }
+
+    #second {
+      width: 45%;
+      height: 5px;
+      background: rgb(165, 25, 67);
+      border-radius: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%);
+      transform-origin: left center;
+    }
+
+    #dot {
+      width: 12px;
+      height: 12px;
+      background: rgb(81, 12, 128);
+      border-radius: 50%;
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <img id='img1' src="./papery-procrastinating-1.gif" alt="">
+  <div id="clock">
+    <div id="dot"></div>
+    <div id="hour"></div>
+    <div id="minute"></div>
+    <div id="second"></div>
+  </div>
+
+  <script>
+    const hour = document.getElementById('hour')
+    const minute = document.getElementById('minute')
+    const second = document.getElementById('second')
+    const img1 = document.getElementById('img1')
+    alert('設定鬧鐘時間')
+    const alarmClockhour = prompt(`請輸入幾點（24小時制)\n\n範例1:下午2點 請輸入14\n範例2:凌晨12點 請輸入0`)
+    const alarmClockminute = prompt(`請輸入幾分\n\n範例1:2分 請輸入2\n範例2:12 請輸入12`)
+
+
+    setInterval(() => {
+      const date = new Date()
+      hour.style.transform = `rotate(${date.getHours() * 30 - 90}deg)`
+      minute.style.transform = `rotate(${date.getMinutes() * 6 - 90}deg)`
+      second.style.transform = `rotate(${date.getSeconds() * 6 - 90}deg)`
+      let nowhour = date.getHours().toString()
+      let nowminute = date.getMinutes().toString()
+      if (alarmClockhour == nowhour && alarmClockminute == nowminute) {
+        img1.setAttribute('src', './wakeup.png')
+      }
+
+    }, 1000) 
+  </script>
+</body>
+
+</html>
