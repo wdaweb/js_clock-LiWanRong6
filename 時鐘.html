@@ -5,45 +5,53 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <title>Document</title>
   <style>
     body {
       background: rgb(241, 213, 129);
     }
 
-    img {
+    #img1 {
       position: absolute;
       top: 65%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
+    #img2 {
+      width: 1800px;
+      position: absolute;
+      top: 70%;
+      left: 80%;
+      transform: translate(-50%, -50%);
+    }
+
     #clock {
       background-color: white;
-      width: 200px;
-      height: 200px;
-      border: 10px solid rgb(81, 12, 128);
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       position: absolute;
-      top: 20%;
-      left: 10%;
+      top: 15%;
+      left: 15%;
     }
 
     #hour {
       width: 20%;
-      height: 5px;
+      height: 3px;
       background: rgb(165, 25, 67);
       border-radius: 20px;
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translateY(-50%);
+      transform: translate(-50%-50%);
       transform-origin: left center;
     }
 
     #minute {
       width: 35%;
-      height: 5px;
+      height: 3px;
       background: rgb(165, 25, 67);
       border-radius: 20px;
       position: absolute;
@@ -53,17 +61,6 @@
       transform-origin: left center;
     }
 
-    #second {
-      width: 45%;
-      height: 5px;
-      background: rgb(165, 25, 67);
-      border-radius: 20px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateY(-50%);
-      transform-origin: left center;
-    }
 
     #dot {
       width: 12px;
@@ -71,21 +68,51 @@
       background: rgb(81, 12, 128);
       border-radius: 50%;
       position: absolute;
-      top: 52%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
+    }
+    .circle{
+      width:160px;
+      height: 160px;
+    }
+    .circle svg{
+      position: relative;
+      width: 160px;
+      height: 160px;
+      transform: rotate(270deg);
+    }
+    .circle svg circle{
+      width: 100%;
+      height: 100%;
+      fill:transparent;
+      stroke: rgb(133, 64, 160);
+      stroke-width: 6;
+      transform: translate(15px,5px);
+    }
+    .circle svg circle:nth-child(2){
+      stroke-dasharray: 440;
+      stroke: rgb(201, 109, 166);
     }
   </style>
 </head>
 
 <body>
-  <img id='img1' src="./papery-procrastinating-1.gif" alt="">
+  <audio id='alarmClockAudio' src="" autoplay></audio>
+  <img id='img1' src="./images/papery-procrastinating-1.gif" alt="">
+  <img id='img2' src="" alt="">
+  
   <div id="clock">
     <div id="dot"></div>
     <div id="hour"></div>
     <div id="minute"></div>
-    <div id="second"></div>
+    <div class="circle">
+    <svg>
+        <circle cx="70" cy="70" r="70"></circle>
+        <circle cx="70" cy="70" r="70" id="second"></circle>
+      </svg>
+    </div>
   </div>
 
   <script>
@@ -93,20 +120,37 @@
     const minute = document.getElementById('minute')
     const second = document.getElementById('second')
     const img1 = document.getElementById('img1')
+    const img2 = document.getElementById('img2')
+    const alarmAudio = document.getElementById('alarmClockAudio')
+    // 設定鬧鐘
     alert('設定鬧鐘時間')
-    const alarmClockhour = prompt(`請輸入幾點（24小時制)\n\n範例1:下午2點 請輸入14\n範例2:凌晨12點 請輸入0`)
-    const alarmClockminute = prompt(`請輸入幾分\n\n範例1:2分 請輸入2\n範例2:12 請輸入12`)
-
+    const alarmClockhour = prompt(`請輸入幾點(24小時制)\n\n範例:凌晨12點 請輸入24`)
+    const alarmClockminute = prompt(`請輸入幾分(2位數)\n\n範例:2分 請輸入02`)
 
     setInterval(() => {
       const date = new Date()
+      let nowhour = date.getHours().toString().padStart(2, '0')
+      let nowminute = date.getMinutes().toString().padStart(2, '0')
+      let nowsecond = date.getSeconds()
+      if(nowhour=='00'){
+        nowhour='24'
+      }
+
       hour.style.transform = `rotate(${date.getHours() * 30 - 90}deg)`
       minute.style.transform = `rotate(${date.getMinutes() * 6 - 90}deg)`
-      second.style.transform = `rotate(${date.getSeconds() * 6 - 90}deg)`
-      let nowhour = date.getHours().toString()
-      let nowminute = date.getMinutes().toString()
-      if (alarmClockhour == nowhour && alarmClockminute == nowminute) {
-        img1.setAttribute('src', './wakeup.png')
+      second.style.strokeDashoffset=440-(440*date.getSeconds())/60
+
+      // 鬧鐘時間，響鈴
+      if (alarmClockhour == nowhour && alarmClockminute == nowminute && nowsecond == 1) {
+        alarmAudio.setAttribute('src', './鬧鐘鈴聲.mp3')
+      }
+      // 鬧鐘時間過了50s，人走過來叫起床
+      if (alarmClockhour == nowhour && alarmClockminute == nowminute && nowsecond == 50) {
+        img2.setAttribute('src', './images/77.gif')
+      }
+      // 鬧鐘時間過了59s，驚醒
+      if (alarmClockhour == nowhour && alarmClockminute == nowminute && nowsecond == 59) {
+        img1.setAttribute('src', './images/wakeup.png')
       }
 
     }, 1000) 
